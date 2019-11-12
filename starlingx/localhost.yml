@@ -1,0 +1,55 @@
+---
+# 系统配置
+# =================
+# 单节点部署
+system_mode: simplex
+# 双节点 或 多节点部署
+#system_mode: standard
+
+distributed_cloud_role: none
+# 分布式部署
+#distributed_cloud_role: systemcontroller
+timezone: Asia/Shanghai
+
+dns_servers:
+  - 114.114.114.114
+  - 8.8.8.8
+
+admin_username: admin
+# 自定义集群访问密码
+admin_password: <password>
+# 主机root权限密码
+ansible_become_pass: <sysadmin-password>
+
+# 网络配置
+# ==================
+external_oam_subnet: 10.10.10.0/24
+external_oam_gateway_address: 10.10.10.1
+external_oam_floating_address: 10.10.10.2
+# external_oam_start_address:
+# external_oam_end_address:
+# external_oam_node_0_address:
+# external_oam_node_1_address:
+
+management_subnet: 192.168.204.0/24
+# management_start_address:
+# management_end_address:
+cluster_host_subnet: 192.168.206.0/24
+# cluster_host_start_address:
+# cluster_host_end_address:
+
+
+
+# DOCKER REGISTRIES
+# =================
+# 离线镜像配置
+#docker_images_archive_source: /home/sysadmin/images
+
+# 以下镜像仓库可在国内访问，无需翻墙
+docker_registries:
+  unified:
+    url: registry.starlingx.cloud:15000
+  defaults:
+    url: registry.starlingx.cloud:15000
+    secure: False
+is_secure_registry: False

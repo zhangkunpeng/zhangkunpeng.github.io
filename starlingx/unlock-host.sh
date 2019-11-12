@@ -308,7 +308,7 @@ config_net_data
 config_ceph_osd
 config_nova_local
 
-if [ "$NTPSERVERS" != ""];then
+if [ "$NTPSERVERS" != "" ];then
     system ntp-modify ntpservers=$NTPSERVERS
 fi
 
