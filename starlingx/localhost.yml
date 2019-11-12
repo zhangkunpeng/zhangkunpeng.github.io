@@ -9,7 +9,8 @@ system_mode: simplex
 distributed_cloud_role: none
 # 分布式部署
 #distributed_cloud_role: systemcontroller
-timezone: Asia/Shanghai
+timezone: UTC
+#timezone: Asia/Shanghai
 
 dns_servers:
   - 114.114.114.114
