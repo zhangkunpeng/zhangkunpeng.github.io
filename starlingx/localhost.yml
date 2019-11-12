@@ -46,7 +46,7 @@ cluster_host_subnet: 192.168.206.0/24
 # 离线镜像配置
 #docker_images_archive_source: /home/sysadmin/images
 
-# 以下镜像仓库可在国内访问，无需翻墙
+# 以下镜像仓库可在国内访问，无需翻墙。如无法使用，请联系我修复 389544053@qq.com
 docker_registries:
   unified:
     url: registry.starlingx.cloud:15000
