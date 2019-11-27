@@ -32,7 +32,7 @@ external_oam_floating_address: 10.10.10.2
 
 management_subnet: 192.168.4.0/24
 management_start_address: 192.168.4.2
-management_end_address: 192.168.4.10
+management_end_address: 192.168.4.20
 cluster_host_subnet: 192.168.6.0/24
 # cluster_host_start_address:
 # cluster_host_end_address:
