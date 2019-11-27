@@ -66,14 +66,3 @@
 
   - name: unlock {{ compute }}
     shell: source /etc/platform/openrc; system host-unlock {{ compute }}
-
-  vars:
-    compute: controller-0
-    oam_if: enp2s0
-    mgmt_if: enp2s1
-    physnet0: physnet0
-    data_net_type: vlan
-    data_if: eth1000
-    ceph_osd_disk: sdb
-    nova_local_disk: sda
-    nova_size: 40
