@@ -1,0 +1,79 @@
+
+- name: provision subcloud
+  task:
+  - name: configure router to central
+    shell: "{{ item }}"
+    register: route_result
+    with_items:
+    - source /etc/platform/openrc; system host-route-add {{ compute }} {{ mgmt_if }} 192.168.4.0 24 192.168.101.1
+
+  - name: configure oam network
+    shell: "{{ item }}"
+    register: oam_result
+    with_items:
+    - source /etc/platform/openrc; system host-if-modify {{ compute }} {{ oam_if }} -c platform
+    - source /etc/platform/openrc; system interface-network-assign controller-0 {{ oam_if }} oam
+
+  - name: configure mgmt network
+    shell: "{{ item }}"
+    register: mgmt_result
+    with_items:
+    - source /etc/platform/openrc; system host-if-modify {{ compute }} lo -c none
+    - source /etc/platform/openrc; IFNET_UUIDS=$(system interface-network-list {{ compute }} | awk '{if ($6=="lo") print $4;}'); for UUID in $IFNET_UUIDS; do system interface-network-remove ${UUID};done
+    - source /etc/platform/openrc; system host-if-modify {{ compute }} {{ mgmt_if }} -c platform
+    - source /etc/platform/openrc; system interface-network-assign {{ compute }} {{ mgmt_if }} mgmt
+    - source /etc/platform/openrc; system interface-network-assign {{ compute }} {{ mgmt_if }} cluster-host
+
+  - name: configure data network
+    shell: "{{ item }}"
+    register: data_result
+    with_items:
+    - source /etc/platform/openrc; system datanetwork-add {{ physnet0 }} {{ data_net_type }}
+    - source /etc/platform/openrc; system host-if-modify -m 1500 -c data {{ compute }} {{ data_if }}
+    - source /etc/platform/openrc; system interface-datanetwork-assign {{ compute }} {{ data_if }} {{ physnet0 }}
+  
+  - name: get disk uuid and tier uuid
+    set_fact:
+      disk_uuid_cmd: "$(system host-disk-list {{ compute }} |grep {{ ceph_osd_disk }} |awk '{print $2}')"
+      tier_uudi_cmd: "$(system storage-tier-list ceph_cluster |grep storage | awk '{print $2}')"
+
+  - name: configure osd
+    shell: "{{ item }}"
+    register: osd_result
+    with_items:
+      - source /etc/platform/openrc; system host-stor-add {{ compute }} {{ disk_uuid_cmd }} --tier-uuid {{ tier_uudi_cmd }}; sleep 10
+  
+  - name: get partition uuid
+    set_fact:
+      disk_uuid_cmd: "$(system host-disk-list {{ compute }} --nowrap | grep {{ nova_local_disk }} | awk '{print $2}')"
+      nova_partition_uuid_cmd: "$(system host-disk-partition-add -t lvm_phys_vol {{ compute }} {{ disk_uuid_cmd }} {{ nova_size }})"
+
+  - name: configure nova local
+    shell: "{{ item }}"
+    register: nova_local_result
+    with_items:
+    - source /etc/platform/openrc; system host-lvg-add {{ compute }} nova-local
+    - source /etc/platform/openrc; system host-pv-add {{ compute }} nova-local {{ nova_partition_uuid_cmd }}; sleep 10
+  
+  - name: configure host label
+    shell: "{{ item }}"
+    register: host_label_result
+    with_items:
+    - source /etc/platform/openrc; system host-label-assign {{ compute }} openstack-control-plane=enabled
+    - source /etc/platform/openrc; system host-label-assign {{ compute }} openstack-compute-node=enabled
+    - source /etc/platform/openrc; system host-label-assign {{ compute }} openvswitch=enabled
+    - source /etc/platform/openrc; system host-label-assign {{ compute }} sriov=enabled
+
+  - name: unlock {{ compute }}
+    shell: source /etc/platform/openrc; system host-unlock {{ compute }}
+
+  vars:
+    compute: controller-0
+    oam_if: enp2s0
+    mgmt_if: enp2s1
+    physnet0: physnet0
+    data_net_type: vlan
+    data_if: eth1000
+    ceph_osd_disk: sdb
+    nova_local_disk: sda
+    nova_size: 40
