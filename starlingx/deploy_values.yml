@@ -1,6 +1,6 @@
 compute: controller-0
-oam_if: enp2s0
-mgmt_if: enp2s1
+oam_if: enp2s1
+mgmt_if: enp2s2
 physnet0: physnet0
 data_net_type: vlan
 data_if: eth1000

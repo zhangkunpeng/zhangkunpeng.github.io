@@ -1,12 +1,7 @@
 
 - name: provision subcloud
-  task:
-  - name: configure router to central
-    shell: "{{ item }}"
-    register: route_result
-    with_items:
-    - source /etc/platform/openrc; system host-route-add {{ compute }} {{ mgmt_if }} 192.168.4.0 24 192.168.101.1
-
+  hosts: all
+  tasks:
   - name: configure oam network
     shell: "{{ item }}"
     register: oam_result
@@ -45,8 +40,8 @@
   
   - name: get partition uuid
     set_fact:
-      disk_uuid_cmd: "$(system host-disk-list {{ compute }} --nowrap | grep {{ nova_local_disk }} | awk '{print $2}')"
-      nova_partition_uuid_cmd: "$(system host-disk-partition-add -t lvm_phys_vol {{ compute }} {{ disk_uuid_cmd }} {{ nova_size }})"
+      nova_disk_uuid_cmd: "$(system host-disk-list {{ compute }} --nowrap | grep {{ nova_local_disk }} | awk '{print $2}')"
+      nova_partition_uuid_cmd: "$(system host-disk-partition-add -t lvm_phys_vol {{ compute }} {{ nova_disk_uuid_cmd }} {{ nova_size }} | grep -ow '| uuid |' | awk '{print $4}')"
 
   - name: configure nova local
     shell: "{{ item }}"
