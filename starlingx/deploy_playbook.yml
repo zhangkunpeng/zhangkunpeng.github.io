@@ -38,9 +38,12 @@
     with_items:
       - source /etc/platform/openrc; system host-stor-add {{ compute }} {{ disk_uuid_cmd }} --tier-uuid {{ tier_uudi_cmd }}; sleep 10
   
-  - name: get partition uuid
+  - name: get nova disk uuid
     set_fact:
       nova_disk_uuid_cmd: "$(system host-disk-list {{ compute }} --nowrap | grep {{ nova_local_disk }} | awk '{print $2}')"
+
+  - name: get nova partition uuid
+    set_fact:
       nova_partition_uuid_cmd: "$(system host-disk-partition-add -t lvm_phys_vol {{ compute }} {{ nova_disk_uuid_cmd }} {{ nova_size }} | grep -ow '| uuid |' | awk '{print $4}')"
 
   - name: configure nova local
