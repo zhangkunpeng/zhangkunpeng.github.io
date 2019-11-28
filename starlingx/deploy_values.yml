@@ -7,3 +7,6 @@ data_if: eth1000
 ceph_osd_disk: sdb
 nova_local_disk: sda
 nova_size: 40
+mgmt_gateway: 192.168.101.1
+central_mgmt_address: 192.168.4.0
+central_mgmt_prefix: 24

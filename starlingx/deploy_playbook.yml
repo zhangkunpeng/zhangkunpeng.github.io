@@ -57,5 +57,11 @@
     - source /etc/platform/openrc; system host-label-assign {{ compute }} openvswitch=enabled
     - source /etc/platform/openrc; system host-label-assign {{ compute }} sriov=enabled
 
+  - name: configure router to central
+    shell: "{{ item }}"
+    register: route_result
+    with_items:
+    - source /etc/platform/openrc; system host-route-add {{ compute }} {{ mgmt_if }} {{ central_mgmt_address }} {{ central_mgmt_prefix }} {{ mgmt_gateway }}
+
   - name: unlock {{ compute }}
     shell: source /etc/platform/openrc; system host-unlock {{ compute }}
