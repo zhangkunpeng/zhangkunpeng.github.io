@@ -10,3 +10,19 @@ external_oam_subnet: 172.16.140.0/24
 external_oam_gateway_address: 172.16.140.1
 external_oam_floating_address: 172.16.140.185
 systemcontroller_gateway_address: 192.168.4.1
+
+docker_registries:
+  k8s.gcr.io:
+   url: registry.central:9001/k8s.gcr.io
+  gcr.io:
+    url: registry.central:9001/gcr.io
+  quay.io:
+    url: registry.central:9001/quay.io
+  docker.io:
+    url: registry.central:9001/docker.io
+  docker.elastic.co:
+    url: registry.central:9001/docker.elastic.co
+  defaults:
+    type: docker
+    username: admin
+    password: 99cloud@SH
