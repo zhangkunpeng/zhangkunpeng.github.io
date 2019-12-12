@@ -55,3 +55,10 @@ docker_registries:
     url: gcr.azk8s.cn
   quay.io:
     url: quay.azk8s.cn
+
+#  unified:
+#    url: registry.starlingx.cloud:15000
+#  defaults:
+#    url: registry.starlingx.cloud:15000
+#    secure: False
+#is_secure_registry: False
