@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# wget https://zhangkunpeng.github.io/starlingx/unlock-host.sh
+
 source /etc/platform/openrc
 . /etc/build.info
 CONFIG_PATH=/opt/platform/config/${SW_VERSION}
@@ -293,8 +295,8 @@ config_host_label(){
         system host-label-assign $COMPUTE  sriov=enabled
         if [ "$K8S_SRIOV" == "y" ];then
             system host-label-assign ${COMPUTE} sriovdp=enabled
-            system host-memory-modify ${COMPUTE} 0 -1G 100
-            system host-memory-modify ${COMPUTE} 1 -1G 100
+            system host-memory-modify ${COMPUTE} 0 -1G 1
+            system host-memory-modify ${COMPUTE} 1 -1G 1
         fi
     fi
 }

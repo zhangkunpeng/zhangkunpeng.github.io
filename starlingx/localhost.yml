@@ -9,8 +9,8 @@ system_mode: simplex
 distributed_cloud_role: none
 # 分布式部署
 #distributed_cloud_role: systemcontroller
-timezone: UTC
-#timezone: Asia/Shanghai
+#timezone: UTC
+timezone: Asia/Shanghai
 
 dns_servers:
   - 114.114.114.114
@@ -18,15 +18,15 @@ dns_servers:
 
 admin_username: admin
 # 自定义集群访问密码
-admin_password: <password>
+admin_password: 99cloud@SH
 # 主机root权限密码
-ansible_become_pass: <sysadmin-password>
+ansible_become_pass: 99cloud@SH
 
 # 网络配置
 # ==================
-external_oam_subnet: 10.10.10.0/24
-external_oam_gateway_address: 10.10.10.1
-external_oam_floating_address: 10.10.10.2
+external_oam_subnet: 172.16.130.0/24
+external_oam_gateway_address: 172.16.130.1
+external_oam_floating_address: 172.16.130.2
 # external_oam_start_address:
 # external_oam_end_address:
 # external_oam_node_0_address:
@@ -39,18 +39,19 @@ cluster_host_subnet: 192.168.206.0/24
 # cluster_host_start_address:
 # cluster_host_end_address:
 
-
+apiserver_cert_sans:
+- test.starlingx.domain
 
 # DOCKER REGISTRIES
 # =================
 # 离线镜像配置
 #docker_images_archive_source: /home/sysadmin/images
 
-# 以下镜像仓库可在国内访问，无需翻墙。如无法使用，请联系我修复 389544053@qq.com
+# 以下镜像仓库可在国内访问，无需翻墙
 docker_registries:
-  unified:
-    url: registry.starlingx.cloud:15000
-  defaults:
-    url: registry.starlingx.cloud:15000
-    secure: False
-is_secure_registry: False
+  k8s.gcr.io:
+   url: gcr.azk8s.cn/google-containers
+  gcr.io:
+    url: gcr.azk8s.cn
+  quay.io:
+    url: quay.azk8s.cn
